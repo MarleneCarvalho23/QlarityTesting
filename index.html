@@ -1,0 +1,1847 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qlarity Testing – Quality Assurance Solutions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Original Color Palette */
+            --primary-color: #e91e63;
+            --primary-dark: #c2185b;
+            --primary-light: #f48fb1;
+            --secondary-color: #9c27b0;
+            --accent-color: #00bcd4;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --error-color: #f44336;
+            
+            /* Dark Theme */
+            --bg-primary: #0f1419;
+            --bg-secondary: #1a2332;
+            --bg-tertiary: #2d3748;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --bg-glass: rgba(255, 255, 255, 0.08);
+            --bg-hover: rgba(255, 255, 255, 0.1);
+            
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+            --text-muted: #718096;
+            
+            --border-color: rgba(255, 255, 255, 0.1);
+            --border-hover: rgba(255, 255, 255, 0.2);
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --gradient-hero: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            --gradient-card: linear-gradient(145deg, var(--bg-card), rgba(255, 255, 255, 0.02));
+            
+            /* Animations */
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.3s ease;
+            --transition-slow: 0.5s ease;
+            
+            /* Spacing */
+            --space-xs: 0.25rem;
+            --space-sm: 0.5rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            --space-2xl: 3rem;
+            --space-3xl: 4rem;
+            
+            /* Border Radius */
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+            --radius-full: 9999px;
+        }
+
+        /* Light Theme */
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #e2e8f0;
+            --bg-card: rgba(0, 0, 0, 0.02);
+            --bg-glass: rgba(0, 0, 0, 0.05);
+            --bg-hover: rgba(0, 0, 0, 0.08);
+            
+            --text-primary: #1a202c;
+            --text-secondary: #4a5568;
+            --text-muted: #718096;
+            
+            --border-color: rgba(0, 0, 0, 0.1);
+            --border-hover: rgba(0, 0, 0, 0.2);
+            
+            --gradient-hero: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            --gradient-card: linear-gradient(145deg, var(--bg-card), rgba(0, 0, 0, 0.02));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            transition: background-color var(--transition-normal), color var(--transition-normal);
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 var(--space-lg);
+        }
+
+        /* Scroll Progress Bar */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: var(--gradient-primary);
+            z-index: 9999;
+            transition: width var(--transition-fast);
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 20, 25, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            transition: all var(--transition-normal);
+        }
+
+        [data-theme="light"] .header {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .header.scrolled {
+            background: rgba(15, 20, 25, 0.95);
+            box-shadow: var(--shadow-lg);
+        }
+
+        [data-theme="light"] .header.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-md) 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: transform var(--transition-normal);
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: rotate(45deg);
+            transition: transform var(--transition-slow);
+        }
+
+        .logo:hover .logo-icon::before {
+            transform: rotate(45deg) translate(100%, 100%);
+        }
+
+        .nav-content {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xl);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: var(--space-xl);
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all var(--transition-normal);
+            position: relative;
+            padding: var(--space-sm) 0;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+            transform: translateY(-2px);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: width var(--transition-normal);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Theme Switcher */
+        .theme-switcher {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-full);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+        }
+
+        .theme-switcher::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 24px;
+            height: 24px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            transition: transform var(--transition-normal);
+            box-shadow: var(--shadow-md);
+        }
+
+        [data-theme="light"] .theme-switcher::before {
+            transform: translateX(28px);
+        }
+
+        .theme-switcher:hover {
+            box-shadow: 0 0 20px rgba(233, 30, 99, 0.3);
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: var(--space-sm);
+            border-radius: var(--radius-md);
+            transition: all var(--transition-normal);
+        }
+
+        .menu-toggle:hover {
+            background: var(--bg-hover);
+            transform: scale(1.1);
+        }
+
+        /* Particles Background */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg); 
+                opacity: 0.6; 
+            }
+            50% { 
+                transform: translateY(-20px) rotate(180deg); 
+                opacity: 1; 
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            background: var(--gradient-hero);
+            overflow: hidden;
+        }
+
+        .hero-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(var(--border-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
+            background-size: 4rem 4rem;
+            z-index: 1;
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            max-width: 50rem;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            background: var(--bg-glass);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-full);
+            padding: var(--space-sm) var(--space-md);
+            margin-bottom: var(--space-xl);
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            backdrop-filter: blur(10px);
+            animation: slideInUp 0.8s ease-out;
+        }
+
+        .hero-badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success-color);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 900;
+            margin-bottom: var(--space-lg);
+            line-height: 1.1;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--primary-color) 50%, var(--secondary-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: slideInUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-3xl);
+            max-width: 40rem;
+            animation: slideInUp 0.8s ease-out 0.4s both;
+            min-height: 2em;
+        }
+
+        .typing-text {
+            border-right: 2px solid var(--primary-color);
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { border-color: var(--primary-color); }
+            51%, 100% { border-color: transparent; }
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+            animation: slideInUp 0.8s ease-out 0.6s both;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-xl);
+            margin-top: var(--space-3xl);
+            animation: slideInUp 0.8s ease-out 0.8s both;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: var(--space-lg);
+            background: var(--bg-glass);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            backdrop-filter: blur(10px);
+            transition: all var(--transition-normal);
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary-color);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            display: block;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-top: var(--space-sm);
+        }
+
+        /* Floating Elements */
+        .floating-element {
+            position: absolute;
+            z-index: 2;
+            animation: floatUpDown 6s ease-in-out infinite;
+        }
+
+        .floating-element:nth-child(1) {
+            top: 20%;
+            right: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-element:nth-child(2) {
+            top: 60%;
+            right: 5%;
+            animation-delay: 2s;
+        }
+
+        .floating-element:nth-child(3) {
+            top: 40%;
+            right: 20%;
+            animation-delay: 4s;
+        }
+
+        .floating-shape {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-lg);
+            opacity: 0.1;
+            transform: rotate(45deg);
+        }
+
+        @keyframes floatUpDown {
+            0%, 100% { transform: translateY(0px) rotate(45deg); }
+            50% { transform: translateY(-20px) rotate(225deg); }
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) var(--space-xl);
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            text-decoration: none;
+            transition: all var(--transition-normal);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left var(--transition-slow);
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-2xl);
+        }
+
+        .btn-secondary {
+            background: var(--bg-glass);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-hover);
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
+        }
+
+        /* Sections */
+        .section {
+            padding: 6rem 0;
+            position: relative;
+        }
+
+        .section:nth-child(even) {
+            background: var(--bg-secondary);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--space-3xl);
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: var(--bg-glass);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-full);
+            padding: var(--space-sm) var(--space-md);
+            margin-bottom: var(--space-md);
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--primary-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .section h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: var(--space-md);
+            color: var(--text-primary);
+        }
+
+        .section-description {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 48rem;
+            margin: 0 auto;
+        }
+
+        /* QA Grid */
+        .qa-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+            gap: var(--space-xl);
+            margin-top: var(--space-3xl);
+        }
+
+        .qa-card {
+            background: var(--gradient-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            backdrop-filter: blur(10px);
+            transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .qa-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transition: transform var(--transition-normal);
+        }
+
+        .qa-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .qa-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: var(--shadow-2xl);
+            border-color: var(--border-hover);
+        }
+
+        .qa-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: var(--space-md);
+            color: var(--text-primary);
+        }
+
+        .qa-card h4 {
+            color: var(--primary-color);
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: var(--space-md);
+        }
+
+        .qa-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* Services Section */
+        .services {
+            background: var(--bg-secondary);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+            gap: var(--space-xl);
+            margin-top: var(--space-3xl);
+        }
+
+        .service-card {
+            background: var(--gradient-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            backdrop-filter: blur(10px);
+            transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(233, 30, 99, 0.1) 0%, transparent 70%);
+            transform: scale(0);
+            transition: transform var(--transition-slow);
+        }
+
+        .service-card:hover::after {
+            transform: scale(1);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-2xl);
+            border-color: var(--primary-color);
+        }
+
+        .service-icon {
+            width: 4rem;
+            height: 4rem;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: var(--space-lg);
+            font-size: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-icon::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: rotate(45deg) translate(-100%, -100%);
+            transition: transform var(--transition-slow);
+        }
+
+        .service-card:hover .service-icon::before {
+            transform: rotate(45deg) translate(100%, 100%);
+        }
+
+        .service-card h4 {
+            color: var(--primary-color);
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--space-sm);
+        }
+
+        .service-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: var(--space-md);
+            color: var(--text-primary);
+        }
+
+        .service-description {
+            color: var(--text-secondary);
+            margin-bottom: var(--space-lg);
+            line-height: 1.7;
+        }
+
+        .service-benefit {
+            background: var(--bg-glass);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: var(--space-md);
+            margin-top: var(--space-md);
+            backdrop-filter: blur(5px);
+        }
+
+        .service-benefit strong {
+            color: var(--success-color);
+        }
+
+        .service-image {
+            width: 100%;
+            height: 12rem;
+            object-fit: cover;
+            border-radius: var(--radius-lg);
+            margin: var(--space-lg) 0;
+            transition: transform var(--transition-normal);
+        }
+
+        .service-card:hover .service-image {
+            transform: scale(1.05);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--gradient-primary);
+            margin: var(--space-3xl) 0;
+            border-radius: var(--radius-2xl);
+            padding: var(--space-3xl) var(--space-xl);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            animation: moveBackground 20s linear infinite;
+        }
+
+        @keyframes moveBackground {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(60px, 60px); }
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 2;
+            max-width: 48rem;
+            margin: 0 auto;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: var(--space-md);
+            color: white;
+        }
+
+        .cta-section p {
+            font-size: 1.125rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: var(--space-xl);
+        }
+
+        .cta-section .btn {
+            background: white;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .cta-section .btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: var(--space-3xl);
+            align-items: center;
+            margin-top: var(--space-3xl);
+        }
+
+        .about-image {
+            background: var(--gradient-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: all var(--transition-normal);
+        }
+
+        .about-image:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-2xl);
+        }
+
+        .about-image-placeholder {
+            width: 100%;
+            height: 16rem;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            margin-bottom: var(--space-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-image-placeholder::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: rotate(45deg) translate(-100%, -100%); }
+            50% { transform: rotate(45deg) translate(100%, 100%); }
+            100% { transform: rotate(45deg) translate(-100%, -100%); }
+        }
+
+        .about-text h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: var(--space-lg);
+            color: var(--text-primary);
+        }
+
+        .about-text p {
+            color: var(--text-secondary);
+            margin-bottom: var(--space-lg);
+            line-height: 1.7;
+        }
+
+        /* Clients Section */
+        .clients {
+            background: var(--bg-secondary);
+        }
+
+        .clients-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+            gap: var(--space-xl);
+            margin-top: var(--space-3xl);
+            align-items: center;
+        }
+
+        .client-logo {
+            height: 4rem;
+            object-fit: contain;
+            filter: grayscale(100%) brightness(0.7);
+            transition: all var(--transition-normal);
+            padding: var(--space-md);
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            backdrop-filter: blur(10px);
+        }
+
+        .client-logo:hover {
+            filter: grayscale(0%) brightness(1);
+            transform: scale(1.1);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+
+        /* Contact Section */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-3xl);
+            margin-top: var(--space-3xl);
+        }
+
+        .contact-info h3 {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--space-sm);
+        }
+
+        .contact-info p {
+            color: var(--text-primary);
+            font-size: 1.125rem;
+            margin-bottom: var(--space-xl);
+        }
+
+        .contact-info a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: all var(--transition-normal);
+            position: relative;
+        }
+
+        .contact-info a:hover {
+            color: var(--primary-dark);
+            transform: translateX(5px);
+        }
+
+        .map-container {
+            width: 100%;
+            height: 16rem;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            margin-top: var(--space-md);
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            transition: all var(--transition-normal);
+        }
+
+        .map-container:hover {
+            transform: scale(1.02);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .map-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.125rem;
+            background: var(--gradient-primary);
+        }
+
+        .contact-form {
+            background: var(--gradient-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            backdrop-filter: blur(10px);
+            transition: all var(--transition-normal);
+        }
+
+        .contact-form:hover {
+            box-shadow: var(--shadow-xl);
+            border-color: var(--border-hover);
+        }
+
+        .contact-form h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: var(--space-md);
+            color: var(--text-primary);
+        }
+
+        .contact-form > p {
+            color: var(--text-secondary);
+            margin-bottom: var(--space-xl);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-md);
+            margin-bottom: var(--space-md);
+        }
+
+        .form-group {
+            margin-bottom: var(--space-md);
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: var(--space-sm);
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: var(--space-md);
+            background: var(--bg-glass);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all var(--transition-normal);
+            backdrop-filter: blur(5px);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(233, 30, 99, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .form-group textarea {
+            height: 8rem;
+            resize: vertical;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-primary);
+            border-top: 1px solid var(--border-color);
+            padding: var(--space-3xl) 0 var(--space-xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, rgba(233, 30, 99, 0.05) 0%, transparent 70%);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: var(--space-3xl);
+            margin-bottom: var(--space-xl);
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: var(--space-md);
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--primary-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer p {
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+            margin-bottom: var(--space-xl);
+        }
+
+        .footer-tagline {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--space-sm);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: var(--space-xl);
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Form message styles */
+        .form-message {
+            padding: var(--space-md);
+            border-radius: var(--radius-md);
+            margin-top: var(--space-md);
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-message.success {
+            background: rgba(76, 175, 80, 0.1);
+            border: 1px solid var(--success-color);
+            color: var(--success-color);
+        }
+
+        .form-message.error {
+            background: rgba(244, 67, 54, 0.1);
+            border: 1px solid var(--error-color);
+            color: var(--error-color);
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0%, 100% { 
+                opacity: 1; 
+                transform: scale(1); 
+            }
+            50% { 
+                opacity: 0.8; 
+                transform: scale(1.05); 
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(2rem);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: slideInUp 0.8s ease-out;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 var(--space-md);
+            }
+            
+            .section {
+                padding: var(--space-3xl) 0;
+            }
+            
+            .hero-cta {
+                flex-direction: column;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .clients-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .cta-section {
+                margin: var(--space-xl) 0;
+                padding: var(--space-xl) var(--space-lg);
+            }
+
+            .nav-content {
+                gap: var(--space-md);
+            }
+
+            .floating-element {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- Header -->
+    <header class="header" id="header">
+        <nav class="nav container" style="padding-left: 2rem; padding-right: 2rem;">
+            <a href="#" class="logo">
+                <div class="logo-icon">Q</div>
+                Qlarity
+            </a>
+            <div class="nav-content">
+                <ul class="nav-links">
+                    <li><a href="#services">Servicios</a></li>
+                    <li><a href="#about">Nosotras</a></li>
+                    <li><a href="#clients">Clientes</a></li>
+                    <li><a href="#contact">Contacto</a></li>
+                </ul>
+                <button class="menu-toggle" id="menuToggle">☰</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="particles" id="particles"></div>
+        <div class="hero-grid"></div>
+        
+        <!-- Floating Elements -->
+        <div class="floating-element">
+            <div class="floating-shape"></div>
+        </div>
+        <div class="floating-element">
+            <div class="floating-shape"></div>
+        </div>
+        <div class="floating-element">
+            <div class="floating-shape"></div>
+        </div>
+        
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <div class="hero-badge-dot"></div>
+                    Especialistas en E-commerce
+                </div>
+                <h1>Qlarity Testing</h1>
+                <p class="hero-subtitle">
+                    <span id="typingText" class="typing-text"></span>
+                </p>
+                <div class="hero-cta">
+                    <a href="mailto:proyectos@qlaritytesting.com?subject=Quiero mejorar mi tienda&body=Hola, me gustaría recibir más información sobre el servicio QA para mi E-commerce." class="btn btn-primary">
+                        Evaluar mi tienda
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- What is QA Section -->
+    <section class="section" id="qa">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">¿Qué es un QA?</div>
+                <h2>El guardián de tu experiencia digital</h2>
+                <p class="section-description">
+                    Encargados de revisar minuciosamente cada aspecto de tu sitio web para garantizar una experiencia perfecta.
+                </p>
+            </div>
+            
+            <div class="qa-grid">
+                <div class="qa-card">
+                    <h3>¿Qué es un QA?</h3>
+                    <h4><h4>La funcion de un tester</h4></h4>
+                    <p>El Tester QA (Quality Assurance) se encarga de <strong>revisar minuciosamente tu sitio web</strong>: desde <strong>evaluar cada sección y formulario</strong> hasta su <strong>velocidad de carga y facilidad de uso</strong>, identificando errores e inconsistencias. </p>
+                </div>
+                
+                <div class="qa-card">
+                    <h3>El enfoque</h3>
+                    <h4>Auditoría integral en tu E-commerce</h4>
+                    <p>Cumpliendo el objetivo de <strong>garantizar la funcionalidad y la experiencia de compra óptima</strong> en tu sitio, identificando errores anticipándose antes de que el usuario los detecte.</p>
+                </div>
+                
+                <div class="qa-card">
+                    <h3>La importancia</h3>
+                    <h4>¿Por qué es indispensable un tester QA en tu E-commerce?</h4>
+                    <p>Un tester QA <strong>protege la reputación de tu marca</strong>. Una tienda online que funciona impecablemente transmite confianza y profesionalismo, fomentando la lealtad del cliente.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="section services" id="services">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">Nuestros Servicios</div>
+                <h2>¿Qué revisamos?</h2>
+                <p class="section-description">
+                    Ofrecemos una gama completa de servicios de QA especializados 
+                    en e-commerce para garantizar el éxito de tu tienda online.
+                </p>
+            </div>
+            
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">⚡</div>
+                    <h4>Testeo de rendimiento</h4>
+                    <h3>Que tu tienda vuele</h3>
+                    <div class="service-description">
+                        <p><strong>¿Qué es?</strong><br>
+                        Medimos la velocidad y fluidez de tu sitio para asegurarnos de que todo cargue rápido, sin interrupciones ni saltos. Nos enfocamos en momentos críticos como la búsqueda de productos o el proceso de pago, donde cada segundo cuenta.</p>
+                    </div>
+                    <img src="https://qlaritytesting.com/wp-content/uploads/2025/07/personasa.jpg" alt="Performance Testing" class="service-image">
+                    <div class="service-benefit">
+                        <p><strong>Tu Beneficio:</strong><br>
+                        Un sitio <strong>ágil y optimizado</strong> mejora la experiencia de compra, retiene a los usuarios impacientes y convierte más visitas en ventas. Porque en E-commerce, <strong>esperar es perder</strong>.</p>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">🔍</div>
+                    <h4>Testeo de SEO básico</h4>
+                    <h3>Que Google te ame</h3>
+                    <div class="service-description">
+                        <p><strong>¿Qué es?</strong><br>
+                        Nos aseguramos de que tu E-commerce esté "hablando el mismo idioma" que Google y otros buscadores. Revisamos que tu tienda esté configurada correctamente para ser encontrada y mostrada en los resultados de búsqueda.</p>
+                    </div>
+                    <img src="https://qlaritytesting.com/wp-content/uploads/2025/06/descarga-4-576x1024.jpg" alt="SEO Testing" class="service-image">
+                    <div class="service-benefit">
+                        <p><strong>Tu beneficio:</strong><br>
+                        Tendrás más <strong>visibilidad</strong> en buscadores, lo que significa mayor tráfico, más visitas calificadas y, en consecuencia, más <strong>oportunidades de venta.</strong> Porque si no te encuentran, no te eligen.</p>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">✅</div>
+                    <h4>Validación de contenido</h4>
+                    <h3>Tu contenido, perfecto</h3>
+                    <div class="service-description">
+                        <p><strong>¿Qué es?</strong><br>
+                        Nos metemos de lleno en tu catálogo y en cada rincón de tu web para asegurarnos de que toda la información esté impecable. Revisamos descripciones, precios, fotos, videos y textos legales para que todo esté <strong>exacto, actualizado y libre de errores</strong>.</p>
+                    </div>
+                    <img src="https://qlaritytesting.com/wp-content/uploads/2025/06/descarga-8.jpg" alt="Content Validation" class="service-image">
+                    <div class="service-benefit">
+                        <p><strong>Tu beneficio:</strong><br>
+                        Proyectarás una <strong>imagen profesional y confiable</strong>, generando seguridad en tus clientes, reduciendo consultas innecesarias y evitando devoluciones por información incorrecta.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA Section -->
+            <div class="cta-section">
+                <div class="cta-content">
+                    <h2>¿Tu tienda está lista para el próximo Hot Sale?</h2>
+                    <p>
+                        Simulamos situaciones extremas de tráfico para verificar si tu E-commerce 
+                        puede soportar miles de usuarios simultáneos sin caerse, enlentecerse ni mostrar errores. 
+                        Preparamos tu tienda para los momentos que más importan.
+                    </p>
+                    <a href="mailto:proyectos@qlaritytesting.com?subject=Quiero mejorar mi tienda&body=Hola, me gustaría recibir más información sobre el servicio QA para mi E-commerce." class="btn">
+                        Quiero mejorar mi Tienda
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section" id="about">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">¿Quiénes somos?</div>
+                <h2>Nuestra Historia</h2>
+            </div>
+            
+            <div class="about-content">
+                <div class="about-image">
+                    <div class="about-image-placeholder">👥</div>
+                    <h3>Socias especializadas en QA y Marketing</h3>
+                </div>
+                <div class="about-text">
+                    <h3>La historia detrás de Qlarity Testing</h3>
+                    <p>Todo arrancó un día en el que estábamos comprando en tiendas online… entonces empezamos a verlos por todos lados: <strong><em>errores</em></strong>. Un carrito que no funcionaba bien, un pago sin éxito, productos con descripciones confusas, stocks que en realidad no estaban disponibles, catálogos con faltas de ortografía…</p>
+                    <p>Como analistas QA, teníamos el ojo entrenado, pero ver que esto pasaba tan seguido en tiendas reales nos hizo un "click".</p>
+                    <p>Así nació Qlarity Testing: de la idea de que cada E-commerce merece funcionar sin ningún tropiezo, y de la visión de dos socias que decidieron dedicarse por <strong>completo</strong> a asegurar que tu tienda online no solo venda, sino que atraiga potenciales clientes y obtenga mejor reputación.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Clients Section -->
+    <section class="section clients" id="clients">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">Portfolio</div>
+                <h2>Nuestros Clientes</h2>
+                <p class="section-description">
+                    Empresas que confían en nosotras para mantener sus e-commerce funcionando perfectamente.
+                </p>
+            </div>
+            
+            <div class="clients-grid">
+                <img src="https://qlaritytesting.com/wp-content/uploads/2022/12/AG-logo1.png" alt="Cliente 1" class="client-logo">
+                <img src="https://qlaritytesting.com/wp-content/uploads/2022/12/Ag-logo3.png" alt="Cliente 2" class="client-logo">
+                <img src="https://qlaritytesting.com/wp-content/uploads/2022/12/Ag-logo4.png" alt="Cliente 3" class="client-logo">
+                <img src="https://qlaritytesting.com/wp-content/uploads/2022/12/AG-logo.png" alt="Cliente 4" class="client-logo">
+                <img src="https://qlaritytesting.com/wp-content/uploads/2022/12/AG-logo2.png" alt="Cliente 5" class="client-logo">
+                <img src="https://qlaritytesting.com/wp-content/uploads/2022/12/Ag-logo5.png" alt="Cliente 6" class="client-logo">
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section" id="contact" style="padding-top: 8rem;">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">Contacto</div>
+                <h2>Hablemos de tu proyecto</h2>
+                <p class="section-description">
+                    ¿Listo para llevar tu E-commerce al siguiente nivel? Contactános y descubrí
+                    cómo podemos ayudarte a crear la experiencia de compra perfecta.
+                </p>
+            </div>
+            
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <h3>Estamos en</h3>
+                    <p>Ciudad Autónoma de Buenos Aires</p>
+                    
+                    <h3>E-mail</h3>
+                    <p><a href="mailto:proyectos@qlaritytesting.com">proyectos@qlaritytesting.com</a></p>
+
+                    <h3>Contactanos por WhatsApp</h3>
+                    <p><a href="https://wa.me/5491136080867" target="_blank"></a>+54 9 11 3608-0867</p>
+                    
+                    <div class="map-container">
+                        <div class="map-placeholder">
+                            📍 Buenos Aires, Argentina
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-form">
+                    <h2>Box de opiniones</h2>
+                    <p>Contanos qué sitio te gustaría que evaluemos. Tu aporte nos ayuda a seguir ofreciendo soluciones de QA para tiendas online.</p>
+                    
+                    <form id="contactForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="nombre">Nombre</label>
+                                <input type="text" id="nombre" name="nombre" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="apellido">Apellido</label>
+                                <input type="text" id="apellido" name="apellido" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">E-mail</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="mensaje">Mensaje</label>
+                            <textarea id="mensaje" name="mensaje" required placeholder="Contanos sobre tu proyecto o qué sitio te gustaría que evaluemos..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            Enviar mensaje
+                            <span>→</span>
+                        </button>
+                    </form>
+                    
+                    <div id="formMessage" class="form-message" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div>
+                <div class="footer-tagline">Impulsá tu tienda con Qlarity testing</div>
+                <h2>Hacé que tu tienda brille</h2>
+                <p>Comprobá con nosotras el potencial real de tu e-commerce. Más ventas, menos errores.</p>
+                <a href="mailto:proyectos@qlaritytesting.com?subject=Quiero mejorar mi tienda&body=Hola, me gustaría recibir más información sobre el servicio QA para mi E-commerce." class="btn btn-primary">
+                    Empezar ahora
+                    <span>→</span>
+                </a>
+
+            </div>
+            <div>
+                <h3 style="color: var(--text-secondary); font-size: 1.2rem; margin-bottom: 1rem;">
+                    "La perfección no es accidental. Es el resultado de un esfuerzo inteligente."
+                </h3>
+                <p style="color: var(--text-muted); font-size: 0.875rem;">
+                    Especialistas en Quality Assurance para E-commerce
+                </p>
+                    <p style="margin-top: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+  <a href="https://www.instagram.com/qlaritytesting" target="_blank" style="text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" width="20" height="20" style="border-radius: 4px;">
+    <span style="color: hotpink;">Seguinos en Instagram</span>
+  </a>
+</p>
+
+
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Qlarity Testing. Todos los derechos reservados.</p>
+        </div>
+
+    </div>
+</footer>
+
+
+
+    <script>
+        // Theme Switcher
+        const themeSwitcher = document.getElementById('themeSwitcher');
+        const body = document.body;
+        
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        body.setAttribute('data-theme', savedTheme);
+        
+        themeSwitcher.addEventListener('click', () => {
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+
+        // Scroll Progress Bar
+        window.addEventListener('scroll', () => {
+            const scrollProgress = document.getElementById('scrollProgress');
+            const scrollTop = window.pageYOffset;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            scrollProgress.style.width = scrollPercent + '%';
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Typing Animation
+        const typingText = document.getElementById('typingText');
+        const texts = [
+            'Transformamos tu e-commerce en una máquina de ventas perfecta.',
+            'Detectamos errores antes que tus clientes.',
+            'Optimizamos la experiencia de compra.',
+            'Garantizamos que cada clic se convierta en una venta.'
+        ];
+        let textIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+
+        function typeWriter() {
+            const currentText = texts[textIndex];
+            
+            if (isDeleting) {
+                typingText.textContent = currentText.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typingText.textContent = currentText.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            let typeSpeed = isDeleting ? 50 : 100;
+
+            if (!isDeleting && charIndex === currentText.length) {
+                typeSpeed = 2000;
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                textIndex = (textIndex + 1) % texts.length;
+                typeSpeed = 500;
+            }
+
+            setTimeout(typeWriter, typeSpeed);
+        }
+
+        // Start typing animation
+        setTimeout(typeWriter, 1000);
+
+        // Particles Animation
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Initialize particles
+        createParticles();
+
+        // Counter Animation
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stat-number');
+            
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-count'));
+                const increment = target / 100;
+                let current = 0;
+                
+                const updateCounter = () => {
+                    if (current < target) {
+                        current += increment;
+                        counter.textContent = Math.ceil(current);
+                        setTimeout(updateCounter, 20);
+                    } else {
+                        counter.textContent = target;
+                    }
+                };
+                
+                updateCounter();
+            });
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerHeight = document.querySelector('.header').offsetHeight;
+                    const targetPosition = target.offsetTop - headerHeight - 20;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Form handling with improved UX
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formMessage = document.getElementById('formMessage');
+            const submitButton = this.querySelector('button[type="submit"]');
+            const originalButtonText = submitButton.innerHTML;
+            
+            // Show loading state
+            submitButton.innerHTML = 'Enviando... <span>⏳</span>';
+            submitButton.disabled = true;
+            
+            // Simulate form submission delay
+            setTimeout(() => {
+                // Show success message
+                formMessage.className = 'form-message success';
+                formMessage.style.display = 'block';
+                formMessage.textContent = '¡Gracias por dejarnos tu opinión! Valoramos tu tiempo y te contactaremos pronto.';
+                
+                // Reset form
+                this.reset();
+                
+                // Reset button
+                submitButton.innerHTML = originalButtonText;
+                submitButton.disabled = false;
+                
+                // Hide message after 5 seconds
+                setTimeout(() => {
+                    formMessage.style.display = 'none';
+                }, 5000);
+            }, 2000);
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in-up');
+                    
+                    // Trigger counter animation for stats
+                    if (entry.target.querySelector('.stat-number')) {
+                        animateCounters();
+                    }
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections and cards
+        document.querySelectorAll('.section, .qa-card, .service-card, .hero-stats').forEach(element => {
+            observer.observe(element);
+        });
+
+        // Mobile menu toggle
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            const navLinks = document.querySelector('.nav-links');
+            console.log('Mobile menu toggle clicked');
+        });
+
+        // Add interactive hover effects
+        document.querySelectorAll('.service-card, .qa-card, .client-logo').forEach(element => {
+            element.addEventListener('mouseenter', function() {
+                this.style.transform = this.classList.contains('client-logo') 
+                    ? 'scale(1.1)' 
+                    : 'translateY(-10px) scale(1.02)';
+            });
+            
+            element.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Parallax effect for hero section
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            const heroGrid = document.querySelector('.hero-grid');
+            const floatingElements = document.querySelectorAll('.floating-element');
+            
+            if (hero && heroGrid) {
+                heroGrid.style.transform = `translateY(${scrolled * 0.3}px)`;
+            }
+            
+            // Parallax for floating elements
+            floatingElements.forEach((element, index) => {
+                const speed = 0.5 + (index * 0.2);
+                element.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+
+        // Add loading animation to buttons
+        document.querySelectorAll('.btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                if (!this.getAttribute('href')?.startsWith('mailto:')) {
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.cssText = `
+                        position: absolute;
+                        border-radius: 50%;
+                        background: rgba(255, 255, 255, 0.3);
+                        transform: scale(0);
+                        animation: ripple-animation 0.6s linear;
+                        pointer-events: none;
+                        width: ${size}px;
+                        height: ${size}px;
+                        left: ${x}px;
+                        top: ${y}px;
+                    `;
+                    
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                }
+            });
+        });
+
+        // Add CSS for ripple effect
+        const rippleStyle = document.createElement('style');
+        rippleStyle.textContent = `
+            @keyframes ripple-animation {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(rippleStyle);
+
+        // Initialize all animations on page load
+        window.addEventListener('load', () => {
+            // Add entrance animations
+            document.querySelectorAll('.hero-content > *').forEach((element, index) => {
+                element.style.animationDelay = `${index * 0.2}s`;
+                element.classList.add('fade-in-up');
+            });
+        });
+    </script>
+</body>
+</html>
