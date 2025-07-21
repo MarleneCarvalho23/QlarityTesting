@@ -184,6 +184,13 @@
             overflow: hidden;
         }
 
+        /* Magnifying Glass SVG */
+        .magnifying-glass {
+            width: 1.5rem;
+            height: 1.5rem;
+            fill: currentColor;
+        }
+
         .logo-icon::before {
             content: '';
             position: absolute;
@@ -452,7 +459,7 @@
             margin-top: var(--space-sm);
         }
 
-        /* Floating Elements */
+        /* Floating Elements - Now Magnifying Glasses */
         .floating-element {
             position: absolute;
             z-index: 2;
@@ -477,18 +484,28 @@
             animation-delay: 4s;
         }
 
-        .floating-shape {
+        .floating-magnifying-glass {
             width: 60px;
             height: 60px;
-            background: var(--gradient-primary);
-            border-radius: var(--radius-lg);
             opacity: 0.1;
-            transform: rotate(45deg);
+            fill: var(--primary-color);
+        }
+
+        .floating-element:nth-child(2) .floating-magnifying-glass {
+            fill: var(--secondary-color);
+            width: 50px;
+            height: 50px;
+        }
+
+        .floating-element:nth-child(3) .floating-magnifying-glass {
+            fill: var(--accent-color);
+            width: 40px;
+            height: 40px;
         }
 
         @keyframes floatUpDown {
-            0%, 100% { transform: translateY(0px) rotate(45deg); }
-            50% { transform: translateY(-20px) rotate(225deg); }
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(15deg); }
         }
 
         /* Buttons */
@@ -900,36 +917,100 @@
             line-height: 1.7;
         }
 
-        /* Clients Section */
-        .clients {
+        /* Coming Soon Projects Section */
+        .projects {
             background: var(--bg-secondary);
         }
 
-        .clients-grid {
+        .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
             gap: var(--space-xl);
             margin-top: var(--space-3xl);
-            align-items: center;
         }
 
-        .client-logo {
-            height: 4rem;
-            object-fit: contain;
-            filter: grayscale(100%) brightness(0.7);
-            transition: all var(--transition-normal);
-            padding: var(--space-md);
-            background: var(--bg-card);
+        .project-card {
+            background: var(--gradient-card);
             border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
             backdrop-filter: blur(10px);
+            transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
         }
 
-        .client-logo:hover {
-            filter: grayscale(0%) brightness(1);
-            transform: scale(1.1);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--primary-color);
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-2xl);
+            border-color: var(--border-hover);
+        }
+
+        .project-placeholder {
+            width: 100%;
+            height: 12rem;
+            background: linear-gradient(135deg, rgba(233, 30, 99, 0.2), rgba(156, 39, 176, 0.2));
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: var(--space-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-placeholder::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: shimmerProject 2s ease-in-out infinite;
+        }
+
+        .project-card:nth-child(2) .project-placeholder::before {
+            animation-delay: 0.5s;
+        }
+
+        .project-card:nth-child(3) .project-placeholder::before {
+            animation-delay: 1s;
+        }
+
+        @keyframes shimmerProject {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .project-magnifying-glass {
+            width: 4rem;
+            height: 4rem;
+            opacity: 0.5;
+        }
+
+        .project-card:nth-child(1) .project-magnifying-glass {
+            fill: var(--primary-color);
+        }
+
+        .project-card:nth-child(2) .project-magnifying-glass {
+            fill: var(--secondary-color);
+        }
+
+        .project-card:nth-child(3) .project-magnifying-glass {
+            fill: var(--accent-color);
+        }
+
+        .project-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: var(--space-sm);
+            color: var(--text-primary);
+        }
+
+        .project-card p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
         }
 
         /* Contact Section */
@@ -1219,10 +1300,6 @@
                 grid-template-columns: 1fr;
             }
             
-            .clients-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
             .cta-section {
                 margin: var(--space-xl) 0;
                 padding: var(--space-xl) var(--space-lg);
@@ -1246,14 +1323,19 @@
     <header class="header" id="header">
         <nav class="nav container" style="padding-left: 2rem; padding-right: 2rem;">
             <a href="#" class="logo">
-                <div class="logo-icon">Q</div>
+                <div class="logo-icon">
+                    <svg class="magnifying-glass" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+                        <path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
                 Qlarity
             </a>
             <div class="nav-content">
                 <ul class="nav-links">
                     <li><a href="#services">Servicios</a></li>
                     <li><a href="#about">Nosotras</a></li>
-                    <li><a href="#clients">Clientes</a></li>
+                    <li><a href="#projects">Proyectos</a></li>
                     <li><a href="#contact">Contacto</a></li>
                 </ul>
                 <button class="menu-toggle" id="menuToggle">☰</button>
@@ -1266,15 +1348,24 @@
         <div class="particles" id="particles"></div>
         <div class="hero-grid"></div>
         
-        <!-- Floating Elements -->
+        <!-- Floating Magnifying Glasses -->
         <div class="floating-element">
-            <div class="floating-shape"></div>
+            <svg class="floating-magnifying-glass" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+                <path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
         </div>
         <div class="floating-element">
-            <div class="floating-shape"></div>
+            <svg class="floating-magnifying-glass" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+                <path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
         </div>
         <div class="floating-element">
-            <div class="floating-shape"></div>
+            <svg class="floating-magnifying-glass" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+                <path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
         </div>
         
         <div class="container">
@@ -1311,7 +1402,7 @@
             <div class="qa-grid">
                 <div class="qa-card">
                     <h3>¿Qué es un QA?</h3>
-                    <h4><h4>La funcion de un tester</h4></h4>
+                    <h4>La función de un tester</h4>
                     <p>El Tester QA (Quality Assurance) se encarga de <strong>revisar minuciosamente tu sitio web</strong>: desde <strong>evaluar cada sección y formulario</strong> hasta su <strong>velocidad de carga y facilidad de uso</strong>, identificando errores e inconsistencias. </p>
                 </div>
                 
@@ -1338,7 +1429,7 @@
                 <h2>¿Qué revisamos?</h2>
                 <p class="section-description">
                     Ofrecemos una gama completa de servicios de QA especializados 
-                    en e-commerce para garantizar el éxito de tu tienda online.
+                    en E-commerce para garantizar el éxito de tu tienda online.
                 </p>
             </div>
             
@@ -1351,7 +1442,7 @@
                         <p><strong>¿Qué es?</strong><br>
                         Medimos la velocidad y fluidez de tu sitio para asegurarnos de que todo cargue rápido, sin interrupciones ni saltos. Nos enfocamos en momentos críticos como la búsqueda de productos o el proceso de pago, donde cada segundo cuenta.</p>
                     </div>
-                    <img src="https://qlaritytesting.com/wp-content/uploads/2025/07/personasa.jpg" alt="Performance Testing" class="service-image">
+                    <img src="img/Rendimiento.jpg" alt="Performance Testing" class="service-image">
                     <div class="service-benefit">
                         <p><strong>Tu Beneficio:</strong><br>
                         Un sitio <strong>ágil y optimizado</strong> mejora la experiencia de compra, retiene a los usuarios impacientes y convierte más visitas en ventas. Porque en E-commerce, <strong>esperar es perder</strong>.</p>
@@ -1366,7 +1457,7 @@
                         <p><strong>¿Qué es?</strong><br>
                         Nos aseguramos de que tu E-commerce esté "hablando el mismo idioma" que Google y otros buscadores. Revisamos que tu tienda esté configurada correctamente para ser encontrada y mostrada en los resultados de búsqueda.</p>
                     </div>
-                    <img src="https://qlaritytesting.com/wp-content/uploads/2025/06/descarga-4-576x1024.jpg" alt="SEO Testing" class="service-image">
+                    <img src="img/SEOGoogle.jpg" alt="SEO Testing" class="service-image">
                     <div class="service-benefit">
                         <p><strong>Tu beneficio:</strong><br>
                         Tendrás más <strong>visibilidad</strong> en buscadores, lo que significa mayor tráfico, más visitas calificadas y, en consecuencia, más <strong>oportunidades de venta.</strong> Porque si no te encuentran, no te eligen.</p>
@@ -1381,13 +1472,60 @@
                         <p><strong>¿Qué es?</strong><br>
                         Nos metemos de lleno en tu catálogo y en cada rincón de tu web para asegurarnos de que toda la información esté impecable. Revisamos descripciones, precios, fotos, videos y textos legales para que todo esté <strong>exacto, actualizado y libre de errores</strong>.</p>
                     </div>
-                    <img src="https://qlaritytesting.com/wp-content/uploads/2025/06/descarga-8.jpg" alt="Content Validation" class="service-image">
+                    <img src="img/ValidacionContenido.jpg" alt="Content Validation" class="service-image">
                     <div class="service-benefit">
                         <p><strong>Tu beneficio:</strong><br>
                         Proyectarás una <strong>imagen profesional y confiable</strong>, generando seguridad en tus clientes, reduciendo consultas innecesarias y evitando devoluciones por información incorrecta.</p>
                     </div>
                 </div>
+                                <div class="service-card">
+                    <div class="service-icon">📈</div>
+                    <h4>Marketing</h4>
+                    <h3>Que cada visita cuente</h3>
+                    <div class="service-description">
+                        <p><strong>¿Qué es?</strong><br>
+                        Analizamos el recorrido completo de tus usuarios desde que llegan hasta que compran. Identificamos puntos de fricción, optimizamos el embudo de conversión y mejoramos cada paso del proceso de compra para maximizar las ventas.</p>
+                    </div>
+                    <img src="img/Marketing.jpg" alt="Marketing Strategy" class="service-image">
+                    <div class="service-benefit">
+                        <p><strong>Tu beneficio:</strong><br>
+                        Aumentarás significativamente tu <strong>tasa de conversión</strong>, obtendrás más ventas con el mismo tráfico y mejorarás el <strong>ROI de tu inversión publicitaria</strong>. Cada visitante tendrá más probabilidades de convertirse en cliente.</p>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">🤖</div>
+                    <h4>SEO con Inteligencia Artificial</h4>
+                    <h3>El futuro de la búsqueda</h3>
+                    <div class="service-description">
+                        <p><strong>¿Qué es?</strong><br>
+                        Implementamos estrategias SEO de nueva generación que aprovechan la inteligencia artificial. Optimizamos para búsquedas semánticas, respuestas de IA y los nuevos algoritmos que priorizan la experiencia del usuario y el contenido de calidad.</p>
+                    </div>
+                    <img src="img/AI.jpg" alt="AI SEO Strategy" class="service-image">
+                    <div class="service-benefit">
+                        <p><strong>Tu beneficio:</strong><br>
+                        Te posicionarás <strong>adelante de la competencia</strong> en los resultados de búsqueda del futuro, capturando tráfico de búsquedas por voz, IA y nuevas formas de descubrimiento digital que están transformando el E-commerce.</p>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">💭</div>
+                    <h4>Ideas de usuarios</h4>
+                    <h3>Feedback directo</h3>
+                    <div class="service-description">
+                        <p><strong>¿Qué es?</strong><br>
+                        Validamos sugerencias de usuarios reales. Gracias a este enfoque, podés tomar decisiones respaldadas por datos reales y reducir la incertidumbre en cada lanzamiento. Esto permite validar ideas antes de invertir tiempo y recursos, generando mayor impacto.</p>
+                    </div>
+                    <img src="img/IdeasUsuarios.jpg" alt="User Testing Ideas" class="service-image">
+                    <div class="service-benefit">
+                        <p><strong>Tu beneficio:</strong><br>
+                        Tomarás <strong>decisiones basadas en datos reales</strong> de tus clientes, reducirás el riesgo de cambios costosos y asegurarás que cada mejora en tu tienda realmente aporte valor, sea útil y genere más ventas.</p>
+                    </div>
+                </div>
             </div>
+            </div>
+            
+            
 
             <!-- CTA Section -->
             <div class="cta-section">
@@ -1429,24 +1567,59 @@
         </div>
     </section>
 
-    <!-- Clients Section -->
-    <section class="section clients" id="clients">
+    <!-- Coming Soon Projects Section -->
+    <section class="section projects" id="projects">
         <div class="container">
             <div class="section-header">
-                <div class="section-badge">Portfolio</div>
-                <h2>Nuestros Clientes</h2>
+                <div class="section-badge">Próximamente</div>
+                <h2>Nuestros Proyectos</h2>
                 <p class="section-description">
-                    Empresas que confían en nosotras para mantener sus e-commerce funcionando perfectamente.
+                    Estamos trabajando en casos de estudio detallados de nuestros proyectos más exitosos. 
+                    Pronto podrás ver cómo hemos transformado E-commerce de diferentes industrias.
                 </p>
             </div>
             
-            <div class="clients-grid">
-                <img src="https://qlaritytesting.com/wp-content/uploads/2022/12/AG-logo1.png" alt="Cliente 1" class="client-logo">
-                <img src="https://qlaritytesting.com/wp-content/uploads/2022/12/Ag-logo3.png" alt="Cliente 2" class="client-logo">
-                <img src="https://qlaritytesting.com/wp-content/uploads/2022/12/Ag-logo4.png" alt="Cliente 3" class="client-logo">
-                <img src="https://qlaritytesting.com/wp-content/uploads/2022/12/AG-logo.png" alt="Cliente 4" class="client-logo">
-                <img src="https://qlaritytesting.com/wp-content/uploads/2022/12/AG-logo2.png" alt="Cliente 5" class="client-logo">
-                <img src="https://qlaritytesting.com/wp-content/uploads/2022/12/Ag-logo5.png" alt="Cliente 6" class="client-logo">
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-placeholder">
+                        <svg class="project-magnifying-glass" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+                            <path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3>Caso de Estudio #1</h3>
+                    <p>E-commerce de moda - Optimización completa</p>
+                </div>
+                
+                <div class="project-card">
+                    <div class="project-placeholder">
+                        <svg class="project-magnifying-glass" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+                            <path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3>Caso de Estudio #2</h3>
+                    <p>Marketplace - Mejora de rendimiento</p>
+                </div>
+                
+                <div class="project-card">
+                    <div class="project-placeholder">
+                        <svg class="project-magnifying-glass" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+                            <path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3>Caso de Estudio #3</h3>
+                    <p>Tienda de electrónicos - Auditoría SEO</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 3rem;">
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">¿Querés ser parte de nuestros próximos casos de éxito?</p>
+                <a href="mailto:proyectos@qlaritytesting.com?subject=Quiero ser un caso de éxito&body=Hola, me gustaría que mi E-commerce sea parte de sus próximos proyectos destacados." class="btn btn-primary">
+                    Contactanos
+                    <span>→</span>
+                </a>
             </div>
         </div>
     </section>
@@ -1465,18 +1638,16 @@
             
             <div class="contact-grid">
                 <div class="contact-info">
-                    <h3>Estamos en</h3>
-                    <p>Ciudad Autónoma de Buenos Aires</p>
                     
                     <h3>E-mail</h3>
                     <p><a href="mailto:proyectos@qlaritytesting.com">proyectos@qlaritytesting.com</a></p>
 
                     <h3>Contactanos por WhatsApp</h3>
-                    <p><a href="https://wa.me/5491136080867" target="_blank"></a>+54 9 11 3608-0867</p>
+                    <p><a href="https://wa.me/5491136080867" target="_blank">+54 9 11 3608-0867</a></p>
                     
                     <div class="map-container">
                         <div class="map-placeholder">
-                            📍 Buenos Aires, Argentina
+                            📍 Ciudad Autonoma de Buenos Aires, Argentina
                         </div>
                     </div>
                 </div>
@@ -1504,7 +1675,7 @@
                         
                         <div class="form-group">
                             <label for="mensaje">Mensaje</label>
-                            <textarea id="mensaje" name="mensaje" required placeholder="Contanos sobre tu proyecto o qué sitio te gustaría que evaluemos..."></textarea>
+                            <textarea id="mensaje" name="mensaje" required placeholder="¿Viste un error o algo que no funcione? Contanos así lo mejoramos 😊"></textarea>
                         </div>
                         
                         <button type="submit" class="btn btn-primary">
@@ -1520,44 +1691,43 @@
     </section>
 
     <!-- Footer -->
-<footer class="footer">
-    <div class="container">
-        <div class="footer-content">
-            <div>
-                <div class="footer-tagline">Impulsá tu tienda con Qlarity testing</div>
-                <h2>Hacé que tu tienda brille</h2>
-                <p>Comprobá con nosotras el potencial real de tu e-commerce. Más ventas, menos errores.</p>
-                <a href="mailto:proyectos@qlaritytesting.com?subject=Quiero mejorar mi tienda&body=Hola, me gustaría recibir más información sobre el servicio QA para mi E-commerce." class="btn btn-primary">
-                    Empezar ahora
-                    <span>→</span>
-                </a>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <div class="footer-tagline">Impulsá tu tienda con Qlarity testing</div>
+                    <h2>Hacé que tu tienda brille</h2>
+                    <p>Comprobá con nosotras el potencial real de tu E-commerce. Más ventas, menos errores.</p>
+                    <a href="mailto:proyectos@qlaritytesting.com?subject=Quiero mejorar mi tienda&body=Hola, me gustaría recibir más información sobre el servicio QA para mi E-commerce." class="btn btn-primary">
+                        Empezar ahora
+                        <span>→</span>
+                    </a>
 
+                </div>
+                <div>
+                    <h3 style="color: var(--text-secondary); font-size: 1.2rem; margin-bottom: 1rem;">
+                        "La perfección no es accidental. Es el resultado de un esfuerzo inteligente."
+                    </h3>
+                    <p style="color: var(--text-muted); font-size: 0.875rem;">
+                        Especialistas en Quality Assurance para E-commerce
+                    </p>
+                        <p style="margin-top: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+<a href="https://www.instagram.com/qlaritytesting" target="_blank" style="text-decoration: none; display: flex; align-items: center; gap: 0.5rem; transition: 0.3s;">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" width="20" height="20" style="border-radius: 4px;">
+  <span style="color: hotpink;">Seguinos en Instagram</span>
+</a>
+
+    </p>
+
+
+                </div>
             </div>
-            <div>
-                <h3 style="color: var(--text-secondary); font-size: 1.2rem; margin-bottom: 1rem;">
-                    "La perfección no es accidental. Es el resultado de un esfuerzo inteligente."
-                </h3>
-                <p style="color: var(--text-muted); font-size: 0.875rem;">
-                    Especialistas en Quality Assurance para E-commerce
-                </p>
-                    <p style="margin-top: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-  <a href="https://www.instagram.com/qlaritytesting" target="_blank" style="text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" width="20" height="20" style="border-radius: 4px;">
-    <span style="color: hotpink;">Seguinos en Instagram</span>
-  </a>
-</p>
-
-
+            <div class="footer-bottom">
+                <p>&copy; 2025 Qlarity Testing. Todos los derechos reservados.</p>
             </div>
+
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 Qlarity Testing. Todos los derechos reservados.</p>
-        </div>
-
-    </div>
-</footer>
-
-
+    </footer>
 
     <script>
         // Theme Switcher
@@ -1568,13 +1738,15 @@
         const savedTheme = localStorage.getItem('theme') || 'dark';
         body.setAttribute('data-theme', savedTheme);
         
-        themeSwitcher.addEventListener('click', () => {
-            const currentTheme = body.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            
-            body.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-        });
+        if (themeSwitcher) {
+            themeSwitcher.addEventListener('click', () => {
+                const currentTheme = body.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                body.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+            });
+        }
 
         // Scroll Progress Bar
         window.addEventListener('scroll', () => {
@@ -1598,7 +1770,7 @@
         // Typing Animation
         const typingText = document.getElementById('typingText');
         const texts = [
-            'Transformamos tu e-commerce en una máquina de ventas perfecta.',
+            'Transformamos tu E-commerce en una máquina de ventas perfecta.',
             'Detectamos errores antes que tus clientes.',
             'Optimizamos la experiencia de compra.',
             'Garantizamos que cada clic se convierta en una venta.'
@@ -1681,8 +1853,6 @@
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                const target = document.querySelector(this.getAttribute('
-                e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
                     const headerHeight = document.querySelector('.header').offsetHeight;
@@ -1760,11 +1930,9 @@
         });
 
         // Add interactive hover effects
-        document.querySelectorAll('.service-card, .qa-card, .client-logo').forEach(element => {
+        document.querySelectorAll('.service-card, .qa-card, .project-card').forEach(element => {
             element.addEventListener('mouseenter', function() {
-                this.style.transform = this.classList.contains('client-logo') 
-                    ? 'scale(1.1)' 
-                    : 'translateY(-10px) scale(1.02)';
+                this.style.transform = 'translateY(-10px) scale(1.02)';
             });
             
             element.addEventListener('mouseleave', function() {
