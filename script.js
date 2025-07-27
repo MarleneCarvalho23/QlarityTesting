@@ -45,6 +45,7 @@ const texts = [
     'Hacemos que cada visita se transforme en oportunidad.', 
     'Tu E-commerce, siempre listo para vender.',     
 ];
+
 let textIndex = 0;
 let charIndex = 0;
 let isDeleting = false;
@@ -195,8 +196,15 @@ document.querySelectorAll('.section, .qa-card, .service-card, .hero-stats').forE
 
 // Mobile menu toggle
 document.getElementById('menuToggle').addEventListener('click', function() {
-    const navLinks = document.querySelector('.nav-links');
+    const navLinks = document.querySelector('.nav-links');   
+    navLinks.classList.toggle('active');
     console.log('Mobile menu toggle clicked');
+});
+document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+        const navLinks = document.querySelector('.nav-links');
+        navLinks.classList.remove('active');
+    });
 });
 
 // Add interactive hover effects
