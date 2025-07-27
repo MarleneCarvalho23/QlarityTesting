@@ -1362,8 +1362,6 @@ body {
     pointer-events: all;
     transform: translateY(0);
   }
-}
-
 
     
     .about-content {
@@ -1384,13 +1382,16 @@ body {
 }
 
 @media (max-width: 798px) {
-    .container {
-        padding: 0 var(--space-md);
-    }
-
-.hero-content{
-  min-width: 90vw;
-}
+  .container {
+    max-width: 100vw;  /* Así no te limita más */
+    width: 100vw;      /* Forzá el ancho real */
+    padding: 0;        /* Para que no te coma espacio */
+  }
+  .hero-content {
+    width: 90vw;       /* Ahora sí, ocupa 90vw real */
+    min-width: unset;  /* Para evitar conflictos */
+    margin: 0 auto;    /* Centrado! */
+  }
     
     .section {
         padding: var(--space-3xl) 0;
