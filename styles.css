@@ -1073,7 +1073,7 @@ body {
 }
 
 .map-container {
-    width: fit-content;
+    width: 100%;
     border-radius: var(--radius-lg);
     overflow: hidden;
     margin-top: var(--space-md);
