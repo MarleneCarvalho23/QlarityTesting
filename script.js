@@ -137,38 +137,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Form handling with improved UX
-document.getElementById('contactForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const formMessage = document.getElementById('formMessage');
-    const submitButton = this.querySelector('button[type="submit"]');
-    const originalButtonText = submitButton.innerHTML;
-    
-    // Show loading state
-    submitButton.innerHTML = 'Enviando... <span>⏳</span>';
-    submitButton.disabled = true;
-    
-    // Simulate form submission delay
-    setTimeout(() => {
-        // Show success message
-        formMessage.className = 'form-message success';
-        formMessage.style.display = 'block';
-        formMessage.textContent = '¡Gracias por dejarnos tu opinión! Valoramos tu tiempo y te contactaremos pronto.';
-        
-        // Reset form
-        this.reset();
-        
-        // Reset button
-        submitButton.innerHTML = originalButtonText;
-        submitButton.disabled = false;
-        
-        // Hide message after 5 seconds
-        setTimeout(() => {
-            formMessage.style.display = 'none';
-        }, 5000);
-    }, 2000);
-});
 
 // Intersection Observer for animations
 const observerOptions = {
