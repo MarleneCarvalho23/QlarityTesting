@@ -244,3 +244,43 @@ window.addEventListener('load', () => {
         element.classList.add('fade-in-up');
     });
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("contactForm");
+    const messageBox = document.getElementById("formMessage");
+
+    if (!form) {
+        console.log("⚠️ No se encontró el formulario");
+        return;
+    }
+
+    form.addEventListener("submit", function (e) {
+        e.preventDefault(); // Evita el envío tradicional
+        console.log("📨 Formulario capturado");
+
+        const formData = new FormData(form);
+
+        fetch("send.php", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+            console.log("📩 Respuesta del servidor:", data);
+            messageBox.style.display = "block";
+            if (data.includes("correctamente")) {
+                messageBox.className = "form-message success";
+            } else {
+                messageBox.className = "form-message error";
+            }
+            messageBox.textContent = data;
+            form.reset();
+        })
+        .catch(error => {
+            messageBox.style.display = "block";
+            messageBox.className = "form-message error";
+            messageBox.textContent = "Error inesperado: " + error;
+        });
+    });
+});
+
