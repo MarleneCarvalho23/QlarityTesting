@@ -1062,11 +1062,11 @@ body {
 
 /* Contact Section */
 .contact-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-3xl);
-  margin-top: var(--space-3xl);
+  display: flex;
+  justify-content: center;
+  margin: var(--space-3xl) auto 0;
 }
+
 
 .contact-info h3 {
   color: var(--text-muted);
