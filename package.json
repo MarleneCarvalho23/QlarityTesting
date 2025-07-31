@@ -1,0 +1,11 @@
+{
+  "name": "proyecto-qlarity-testing",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^30.0.5"
+  }
+}
+
